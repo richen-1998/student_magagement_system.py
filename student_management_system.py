@@ -1,9 +1,9 @@
 def show_menu():
-    print("---------------------------")
-    print("STUDENT MANAGEMENT SYSTEM")
-    print("---------------------------")
     print()
-    print('1. Add student')
+    print("--------------------------------")
+    print("STUDENT MANAGEMENT SYSTEM")
+    print("--------------------------------")
+    print("1. Add student")
     print("2. View students")
     print("3. Search student")
     print("4. Show statistics")
@@ -11,45 +11,85 @@ def show_menu():
     print("6. Remove student")
     print("7. Exit")
 
-students = []
+
+def get_valid_name():
+
+    while True:
+
+        name = input("Student name: ").strip()
+
+        if name != "":
+            return name.title()
+
+        print("Name cannot be empty.")
+
+
+def get_valid_score():
+
+    while True:
+
+        try:
+            score = float(input("Score: "))
+
+            if 0 <= score <= 100:
+                return score
+
+            print("Score must be between 0 and 100.")
+
+        except ValueError:
+            print("Please enter a valid number.")
+
+
+def student_exists(students, name):
+
+    for student in students:
+
+        if student["name"].lower() == name.lower():
+            return True
+
+    return False
+
 
 def add_student(students):
+
     print()
-    print("---- ADD STUDENT ----")
+    print("--- ADD STUDENT ---")
 
-    name = input("Studen name: ").strip().title()
-    score = float(input("Score: "))
+    name = get_valid_name()
 
-    while score < 0 or score > 100:
-        print("Score must be between 0 and 100.")
-        score = float(input("Score: "))
+    if student_exists(students, name):
+        print("A student with that name already exists.")
+        return
+
+    score = get_valid_score()
 
     student = {
-        'name' : name,
-        'score' : score
+        "name": name,
+        "score": score
     }
 
     students.append(student)
-    print('Student added.')
+
+    print("Student added.")
+
 
 def view_students(students):
+
     print()
-    print("------ ALL STUDENTS -----")
+    print("--- ALL STUDENTS ---")
 
     if len(students) == 0:
-        print("No students recoreded.")
+        print("No students recorded.")
         return
 
     for student in students:
-        print(f'{student['name']} - {student['score']:.2f}')
- 
-
+        print(f"{student['name']} — {student['score']:.2f}")
 
 
 def search_student(students):
 
     print()
-    print("----- SEARCH STUDENT ----")
+    print("--- SEARCH STUDENT ---")
 
     if len(students) == 0:
         print("No students recorded.")
@@ -59,21 +99,22 @@ def search_student(students):
 
     for student in students:
 
-        if student['name'].lower() == target:
-            print('Student found.')
-            print(f'Name: {student['name']}')
-            print(f'Score: {student['score']:.2f}')
+        if student["name"].lower() == target:
+            print("Student found.")
+            print(f"Name: {student['name']}")
+            print(f"Score: {student['score']:.2f}")
             return
 
-        print("Student not found.")
+    print("Student not found.")
 
 
 def show_statistics(students):
+
     print()
-    print("---- STUDENT STATISTICS ----")
+    print("--- STUDENT STATISTICS ---")
 
     if len(students) == 0:
-        print("No students recoreded.")
+        print("No students recorded.")
         return
 
     total = 0
@@ -82,61 +123,57 @@ def show_statistics(students):
     lowest_student = students[0]
 
     for student in students:
-        total += student['score']
 
-        if student['score'] > highest_student['score']:
+        total += student["score"]
+
+        if student["score"] > highest_student["score"]:
             highest_student = student
 
-        if student['score'] < lowest_student['score']:
+        if student["score"] < lowest_student["score"]:
             lowest_student = student
 
     average = total / len(students)
 
-    print(f'Number of students: {len(students)}')
-    print(f'Average score: {average:.2f}')
-
-    print()
+    print(f"Number of students: {len(students)}")
+    print(f"Average score: {average:.2f}")
     print(
-        f"Highest-scoring student: "
-        f"{highest_student['name']}"
+        f"Highest: {highest_student['name']} "
+        f"({highest_student['score']:.2f})"
     )
-    print(f"Highest score: {highest_student['score']:.2f}")
-
-    print()
     print(
-        f"Lowest-scoring student: "
-        f"{lowest_student['name']}"
+        f"Lowest: {lowest_student['name']} "
+        f"({lowest_student['score']:.2f})"
     )
-    print(f"Lowest score: {lowest_student['score']:.2f}")
-
-
 
 
 def show_passing_students(students):
+
     print()
-    print("---- PASSING STUDENTS ----")
+    print("--- PASSING STUDENTS ---")
 
     if len(students) == 0:
-        print('No students recorded.')
+        print("No students recorded.")
         return
 
     passed = 0
     failed = 0
 
     for student in students:
-        if student['score']>=40:
-            print(f'{student['name']} - {student['score']:.2f}')
-            passed +=1
+
+        if student["score"] >= 40:
+            print(f"{student['name']} — {student['score']:.2f}")
+            passed += 1
 
         else:
             failed += 1
 
-
     print()
-    print(f'Number passed: {passed}')
-    print(f'Number failed: {failed}')
+    print(f"Number passed: {passed}")
+    print(f"Number failed: {failed}")
+
 
 def remove_student(students):
+
     print()
     print("--- REMOVE STUDENT ---")
 
@@ -156,39 +193,39 @@ def remove_student(students):
     print("Student not found.")
 
 
+# ------------------------------
+# MAIN PROGRAM
+# ------------------------------
+
+students = []
 
 while True:
 
     show_menu()
 
-    choose_option = input("\nChoose: ").strip()
+    choice = input("\nChoose: ").strip()
 
-    if choose_option == "1":
+    if choice == "1":
         add_student(students)
 
-    elif choose_option == "2":
+    elif choice == "2":
         view_students(students)
 
-    elif choose_option == "3":
+    elif choice == "3":
         search_student(students)
 
-    elif choose_option == "4":
+    elif choice == "4":
         show_statistics(students)
 
-    elif choose_option == "5":
+    elif choice == "5":
         show_passing_students(students)
 
-    elif choose_option == "6":
+    elif choice == "6":
         remove_student(students)
 
-    elif choose_option == "7":
-        print("Thank you.")
+    elif choice == "7":
+        print("Goodbye.")
         break
 
     else:
-        print("Invalid option. Choose 1-7")
-
-    
-
-
-    
+        print("Invalid option. Choose 1-7.")
