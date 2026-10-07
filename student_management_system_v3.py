@@ -1,4 +1,27 @@
+import json
+
+
+def load_students():
+
+    try:
+
+        with open("students.json", "r") as file:
+            students = json.load(file)
+
+        return students
+
+    except FileNotFoundError:
+        return []
+
+
+def save_students(students):
+
+    with open("students.json", "w") as file:
+        json.dump(students, file, indent=4)
+
+
 def show_menu():
+
     print()
     print("--------------------------------")
     print("STUDENT MANAGEMENT SYSTEM")
@@ -29,6 +52,7 @@ def get_valid_score():
     while True:
 
         try:
+
             score = float(input("Score: "))
 
             if 0 <= score <= 100:
@@ -70,7 +94,9 @@ def add_student(students):
 
     students.append(student)
 
-    print("Student added.")
+    save_students(students)
+
+    print("Student added and saved.")
 
 
 def view_students(students):
@@ -100,9 +126,11 @@ def search_student(students):
     for student in students:
 
         if student["name"].lower() == target:
+
             print("Student found.")
             print(f"Name: {student['name']}")
             print(f"Score: {student['score']:.2f}")
+
             return
 
     print("Student not found.")
@@ -136,10 +164,12 @@ def show_statistics(students):
 
     print(f"Number of students: {len(students)}")
     print(f"Average score: {average:.2f}")
+
     print(
         f"Highest: {highest_student['name']} "
         f"({highest_student['score']:.2f})"
     )
+
     print(
         f"Lowest: {lowest_student['name']} "
         f"({lowest_student['score']:.2f})"
@@ -161,7 +191,12 @@ def show_passing_students(students):
     for student in students:
 
         if student["score"] >= 40:
-            print(f"{student['name']} — {student['score']:.2f}")
+
+            print(
+                f"{student['name']} — "
+                f"{student['score']:.2f}"
+            )
+
             passed += 1
 
         else:
@@ -186,18 +221,24 @@ def remove_student(students):
     for student in students:
 
         if student["name"].lower() == target:
+
             students.remove(student)
-            print("Student removed.")
+
+            save_students(students)
+
+            print("Student removed and changes saved.")
+
             return
 
     print("Student not found.")
 
 
-# ------------------------------
-# MAIN PROGRAM
-# ------------------------------
 
-students = []
+# MAIN PROGRAM
+
+
+students = load_students()
+
 
 while True:
 
