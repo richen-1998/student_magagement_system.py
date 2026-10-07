@@ -13,6 +13,10 @@ def load_students():
     except FileNotFoundError:
         return []
 
+    except json.JSONDecodeError:
+        print("Student data file is corrupted.")
+        return []
+
 
 def save_students(students):
 
